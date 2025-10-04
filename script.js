@@ -45,16 +45,15 @@ const questions = [
 let currentQuestion = 0;
 let score = 0;
 
-
 function showQuestion(){
-    q = questions[currentQuestion];
+    const q = questions[currentQuestion];
     document.getElementById("question").innerHTML = q.question;
     const optionsForm = document.getElementById("options");
     optionsForm.innerHTML = "";
 
-    q.options.forEach((opt, index) => {
+    q.options.forEach((opt, index) => {   
         const label = document.createElement("label");
-        const radio = document.createElement("radio");
+        const radio = document.createElement("input"); 
         radio.type = "radio";
         radio.name = "option";
         radio.value = index;
@@ -64,11 +63,34 @@ function showQuestion(){
         optionsForm.appendChild(label);
         optionsForm.appendChild(document.createElement("br"));
     });
-    
 }
 
-showQuestion();
+document.getElementById("nextBtn").onclick = function (e) {
+    e.preventDefault();
 
+    const selected = document.querySelector('input[name="option"]:checked');
+    if (!selected){
+        alert("please choose an answer!");
+        return;
+    }
+
+    if (parseInt(selected.value) === questions[currentQuestion].answer) { 
+        score++;
+    }
+    
+    currentQuestion++; 
+    
+    if (currentQuestion < questions.length) { 
+        showQuestion();
+    }
+    else {
+        document.getElementById("quiz").style.display = "none";
+        document.getElementById("result").style.display = "block";
+        document.getElementById("score").innerText = `Your score : ${score} from ${questions.length}`;
+    }
+};
+
+showQuestion();
 
 // function showQuestion (){
 //     const q = questions[currentQuestion];
